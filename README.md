@@ -1,73 +1,83 @@
-# React + TypeScript + Vite
+# English Placement Test - Technical Interview
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a React-based web application developed for the technical interview. It handles an end-to-end flow for an English Placement Test, including student registration, a timed multi-step examination, and results submission.
 
-Currently, two official plugins are available:
+## 🚀 Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Framework**: [React](https://react.dev/) + [Vite](https://vitejs.dev/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **State Management**: [Zustand](https://github.com/pmndrs/zustand)
+- **Data Fetching**: [TanStack Query (React Query)](https://tanstack.com/query/latest)
+- **Form Handling**: [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/)
+- **Routing**: [React Router](https://reactrouter.com/)
+- **HTTP Client**: [Axios](https://axios-http.com/)
 
-## React Compiler
+## ✨ Key Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1.  **Student Registration**:
 
-## Expanding the ESLint configuration
+    - Form validation using Zod schema.
+    - Captures student details (Name, Email, Phone, Age).
+    - Starts a new test session upon successful submission.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+2.  **Examination System**:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+    - **Stepper Navigation**: Tracks progress across multiple question sections (1-6, 7-12, etc.) and the final writing task.
+    - **Question Rendering**: Dynamically fetches and renders multiple-choice questions based on the current step.
+    - **Writing Task**: A dedicated section for essay input.
+    - **State Persistence**: Uses Zustand to manage answers, current step, and session data globally.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+3.  **Timer Integration**:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+    - Real-time stopwatch tracking the duration of the test.
+    - Persisted across navigation using global store state.
+    - Formatted display (MM:SS).
+
+4.  **Submission Handling**:
+    - Builds a structured payload strictly adhering to API requirements.
+    - Handles mixed data types (multiple choice IDs and string-based essay answers).
+    - Submits data via `application/x-www-form-urlencoded` format.
+    - Displays a success modal upon completion.
+
+## 📂 Project Structure
+
+```
+src/
+├── components/         # Reusable UI components (Stepper, Modal, etc.)
+├── features/          # Feature-specific components
+│   ├── question/      # Question lists, cards, essay form, payload
+│   ├── student/       # student registration
+│   ├── Navigation     # logic for navigation buttons
+│   └── Timer.tsx      # Stopwatch component
+├── hooks/             # Custom hooks (useGetQuestions, useSubmitTest)
+├── lib/               # Utility functions and constants
+├── pages/             # Page layouts (Index, StudentProfile,  QuestionLayout)
+├── services/          # API service definitions (Axios setup)
+├── store/             # Zustand stores (SessionStore, AnswerStore)
+└── App.tsx            # Main application entry with Routing
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🛠️ Setup & Running
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1.  **Install Dependencies**:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+    ```bash
+    npm install
+    ```
+
+2.  **Run Development Server**:
+
+    ```bash
+    npm run dev
+    ```
+
+3.  **Build for Production**:
+    ```bash
+    npm run build
+    ```
+
+## 📝 Notes on Implementation
+
+- **Strict Payload Formatting**: Special attention was paid to the submission service (`submit.services.ts`) to ensure compatibility with the backend API, specifically handling the `student_answers` key and `FormData` serialization.
+- **Responsive Design**: The application works seamlessly on both desktop and mobile devices, with responsive navigation steps.
