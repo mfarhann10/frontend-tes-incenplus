@@ -17,6 +17,8 @@ interface SessionState {
   setStep: (step: Step) => void
   nextStep: () => void
   prevStep: () => void
+  duration: number
+  setDuration: (duration: number) => void
 }
 
 export const useSessionStore = create<SessionState>((set) => ({
@@ -24,10 +26,13 @@ export const useSessionStore = create<SessionState>((set) => ({
   studentAnswerId: null,
   setQuestion: null,
   currentStep: 1,
+  duration: 0,
 
   setSession: (data) => set(data),
 
   setStep: (step) => set({ currentStep: step }),
+
+  setDuration: (duration) => set({ duration }),
 
   nextStep: () =>
     set((state) => ({

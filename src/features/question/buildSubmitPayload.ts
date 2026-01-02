@@ -4,8 +4,11 @@ import { useSessionStore } from "../../store/SessionStore"
 
 export const buildSubmitPayload = (): SubmitPayload => {
   const { answers, essay } = useAnswerStore.getState()
-  const { studentId, studentAnswerId } = useSessionStore.getState()
-
+  const { studentId, studentAnswerId, duration } = useSessionStore.getState()
+  
+  const minutes = Math.floor(duration / 60)
+  const seconds = duration % 60
+  const formattedDuration = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
 
   return {
     student_id: studentId!,
@@ -20,7 +23,7 @@ export const buildSubmitPayload = (): SubmitPayload => {
         answer_id: essay,
       },
     ],
-    duration: "25:30",
+    duration: formattedDuration,
     timestamp: Date.now(),
   }
 

@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
+import { useSessionStore } from "../store/SessionStore"
 
 export const Timer = () => {
-  const [time, setTime] = useState(0)
+  const duration = useSessionStore((state) => state.duration)
+  const setDuration = useSessionStore((state) => state.setDuration)
 
   useEffect(() => {
     const intervalId = window.setInterval(() => {
-      setTime((prevTime) => prevTime + 1)
+      const currentDuration = useSessionStore.getState().duration
+      setDuration(currentDuration + 1)
     }, 1000)
 
     return () => {
@@ -25,7 +28,7 @@ export const Timer = () => {
     }
   }
 
-  const { hours, minutes, seconds } = formatTime(time)
+  const { minutes, seconds } = formatTime(duration)
 
   return (
     <div className="mt-8 flex flex-col items-center gap-2 mb-12">
@@ -36,9 +39,9 @@ export const Timer = () => {
           year: 'numeric'
         })}
       </p>
-      {/* <p className="text-base">
-        Time: {hours}:{minutes}:{seconds}
-      </p> */}
+      <p className="text-base text-gray-500 font-medium">
+         {minutes}:{seconds}
+      </p>
     </div>
   )
 }
