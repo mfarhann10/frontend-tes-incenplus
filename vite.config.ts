@@ -7,4 +7,13 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  server: {
+    proxy: {
+      "/api": {
+        target: "https://elc-onlinetest.incenplus.com",
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
 })

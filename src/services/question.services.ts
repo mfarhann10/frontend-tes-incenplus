@@ -8,7 +8,7 @@ interface Option{
     is_true: number;
 }
 
-interface QuestionListResponse{
+export interface QuestionListResponse{
     id: number;
     question: string;
     is_acitve: number;

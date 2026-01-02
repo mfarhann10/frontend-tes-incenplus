@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import z from "zod";
 import { createUser } from "../../services/student.services";
-import { useTestSessionStore } from "../../store/testSessionStore";
+import { useSessionStore } from "../../store/SessionStore";
 import { useNavigate } from "react-router-dom";
 
 const schema = z.object({
@@ -26,7 +26,7 @@ export const CreateStudentForm = () => {
     resolver: zodResolver(schema),
   })
 
-  const { setSession } = useTestSessionStore()
+  const { setSession, setStep } = useSessionStore()
 
   const {register, handleSubmit, reset, formState, } = methods;
   const {errors} = formState;
@@ -40,7 +40,7 @@ export const CreateStudentForm = () => {
         studentAnswerId: res.data.student_answer_id,
         setQuestion: res.data.set_question,
       })
-
+      setStep(2)
       reset()
       navigate("/questions")
     } catch (error) {

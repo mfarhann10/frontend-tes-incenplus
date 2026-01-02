@@ -1,12 +1,12 @@
 import { create } from "zustand"
 
-export type TestStep = 1 | 2 | 3 | 4 | 5 | 6
+export type Step = 1 | 2 | 3 | 4 | 5 | 6
 
-interface TestSessionState {
+interface SessionState {
   studentId: number | null
   studentAnswerId: number | null
   setQuestion: string | null
-  currentStep: TestStep
+  currentStep: Step
 
   setSession: (data: {
     studentId: number
@@ -14,12 +14,12 @@ interface TestSessionState {
     setQuestion: string
   }) => void
 
-  setStep: (step: TestStep) => void
+  setStep: (step: Step) => void
   nextStep: () => void
   prevStep: () => void
 }
 
-export const useTestSessionStore = create<TestSessionState>((set) => ({
+export const useSessionStore = create<SessionState>((set) => ({
   studentId: null,
   studentAnswerId: null,
   setQuestion: null,
@@ -31,11 +31,11 @@ export const useTestSessionStore = create<TestSessionState>((set) => ({
 
   nextStep: () =>
     set((state) => ({
-      currentStep: Math.min(state.currentStep + 1, 6) as TestStep,
+      currentStep: Math.min(state.currentStep + 1, 6) as Step,
     })),
 
   prevStep: () =>
     set((state) => ({
-      currentStep: Math.max(state.currentStep - 1, 1) as TestStep,
+      currentStep: Math.max(state.currentStep - 1, 1) as Step,
     })),
 }))
