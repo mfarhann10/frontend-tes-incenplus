@@ -2,6 +2,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import z from "zod";
 import { createUser } from "../../services/student.services";
+import { useTestSessionStore } from "../../store/testSessionStore";
+import { useNavigate } from "react-router-dom";
 
 const schema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters long"),
@@ -18,32 +20,40 @@ interface FormData {
 }
 
 export const CreateStudentForm = () => {
+  const navigate = useNavigate();
 
   const methods = useForm<FormData>({
     resolver: zodResolver(schema),
   })
 
+  const { setSession } = useTestSessionStore()
+
   const {register, handleSubmit, reset, formState, } = methods;
   const {errors} = formState;
 
   const onSubmit = handleSubmit(async (data) => {
-    try {
-      await createUser(data);
-      reset();
-    } catch (error) {
-      console.log(error);
-    }
-  })
+  try {
+    const res = await createUser(data)
+
+    setSession({
+      studentId: res.data.id,
+      studentAnswerId: res.data.student_answer_id,
+      setQuestion: res.data.set_question,
+    })
+
+    reset()
+    navigate("/questions")
+  } catch (error) {
+    console.error(error)
+  }
+})
 
   return (
-    <div className="flex flex-col gap-8">
-        <h1 className="text-2xl font-semibold text-gray-500 text-center">Student Details</h1>
-
         <FormProvider {...methods}>
           <form onSubmit={onSubmit} className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
               <div className="flex flex-col gap-2">
                 <input 
-                  className="border border-gray-300 rounded w-full px-2.5 py-1.5 placeholder:text-gray-400" 
+                  className="border border-gray-300 bg-white rounded w-full px-2.5 py-1.5 placeholder:text-gray-400" 
                   type="text" 
                   placeholder="Student name(In English)" 
                   {...register("name")} 
@@ -53,7 +63,7 @@ export const CreateStudentForm = () => {
 
               <div className="flex flex-col gap-2">
                 <input 
-                  className="border border-gray-300 rounded w-full px-2.5 py-1.5 placeholder:text-gray-400" 
+                  className="border border-gray-300 bg-white rounded w-full px-2.5 py-1.5 placeholder:text-gray-400" 
                   type="text" 
                   placeholder="Email Address" 
                   {...register("email")} 
@@ -63,7 +73,7 @@ export const CreateStudentForm = () => {
 
               <div className="flex flex-col gap-2">
                 <input 
-                  className="border border-gray-300 rounded w-full px-2.5 py-1.5 placeholder:text-gray-400" 
+                  className="border border-gray-300 bg-white rounded w-full px-2.5 py-1.5 placeholder:text-gray-400" 
                   type="text" 
                   placeholder="Phone Number" 
                   {...register("phone")} 
@@ -73,7 +83,7 @@ export const CreateStudentForm = () => {
 
               <div className="flex flex-col gap-2">
                 <input 
-                  className="border border-gray-300 rounded w-full px-2.5 py-1.5 placeholder:text-gray-400" 
+                  className="border border-gray-300 bg-white rounded w-full px-2.5 py-1.5 placeholder:text-gray-400" 
                   type="text" 
                   placeholder="Age" 
                 {...register("age")} 
@@ -91,12 +101,11 @@ export const CreateStudentForm = () => {
                     type="submit"
                     className="w-full lg:w-auto bg-transparent border border-blue-500 text-blue-500 px-6 py-2 rounded-lg hover:bg-blue-100"
                   >
-                    Submit
+                    Next
                   </button>
                 </div>
               </div>
             </form>
           </FormProvider>
-      </div>
   )
 }

@@ -8,7 +8,7 @@ interface Option{
     is_true: number;
 }
 
-interface QuestionList{
+interface QuestionListResponse{
     id: number;
     question: string;
     is_acitve: number;
@@ -20,8 +20,8 @@ interface QuestionList{
 export const getQuestionList = async (
     student_id: number,
     set_question: string
-    ): Promise<QuestionList[]> => {
-        const response = await axiosInstance.get<QuestionList[]>(
+    ): Promise<QuestionListResponse[]> => {
+        const response = await axiosInstance.get<QuestionListResponse[]>(
             `/question/list`,
             {
             params: { student_id, set_question }
