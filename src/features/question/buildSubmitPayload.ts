@@ -6,24 +6,22 @@ export const buildSubmitPayload = (): SubmitPayload => {
   const { answers, essay } = useAnswerStore.getState()
   const { studentId, studentAnswerId } = useSessionStore.getState()
 
+
   return {
     student_id: studentId!,
     student_answer_id: studentAnswerId!,
-    student_answer: [
-      // pilihan ganda
-      ...Object.entries(answers).map(([questionId, answerId]) => ({
-        question_id: Number(questionId),
-        answer_id: answerId,
+    student_answers: [
+      ...Object.entries(answers).map(([qId, aId]) => ({
+        question_id: Number(qId),
+        answer_id: aId,
       })),
-
-      // essay WAJIB
       {
         question_id: 999,
-        answer_id: "0" || essay,
+        answer_id: essay,
       },
     ],
-
-    duration: "25:30",           // menit:detik ✅
-    timestamp: Date.now(),       // unix ms ✅
+    duration: "25:30",
+    timestamp: Date.now(),
   }
+
 }

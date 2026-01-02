@@ -1,4 +1,3 @@
-// store/answerStore.ts
 import { create } from "zustand"
 
 interface AnswerState {
